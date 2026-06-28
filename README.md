@@ -8,7 +8,7 @@ A command line interface to Organise the files in there respective folder accord
 * Also checks if the given folder is already organished.
 * Also checks if the path is present or not.
 
-* Error Handling :
+# Error Handling :
   * Invalid path given
   * Empty folder
   * Given path target to file
