@@ -1,5 +1,7 @@
 import os
 
+# Change thi dictionary to create folder of your choice
+
 known_extension = {
     "Photos" : [".jpg",".jpeg",".png",".webp"],
     "Audio" : [".mp3",".wav"],
@@ -10,14 +12,18 @@ known_extension = {
     "Others" : []
 }
 
-def folder_Name(path):
-    head,ext = os.path.splitext(path)
+# it takes the file path as argument and return the respective folder name for file 
+
+def folder_Name(file_path):
+    head,ext = os.path.splitext(file_path)
     for name in known_extension:
         if ext in known_extension[name]:
             return name
     known_extension["Others"].append(ext)
     return "Others"
 
+# It asks user what to do when finds out two file with same name ?
+# Return True/False and new name depending on user
 def rename(current_path,destination_path):
     print("="*80)
     print("Do you want to change its name ?(Y/N)\nIf no then it will overwrite the file")
@@ -33,10 +39,9 @@ def rename(current_path,destination_path):
             print ("\nInvalid Choice. Going to Rename it")
         print("Note the name shouldn't be in the given list and Exclude extension. =>",os.listdir(destination_path))
         name = input("Enter the name you want to give : ")
-        print("="*80)
         return name+(os.path.splitext(current_path)[1]),True
 
-
+# Organise folder and returns moves_count
 def organise(path):
     moves_count = 0
     for root,dirs,files in os.walk(path):
@@ -51,6 +56,7 @@ def organise(path):
             else:
                 folder = folder_Name(current_path)
                 folder_path = os.path.join(path,folder)
+
                 if not os.path.exists(folder_path):
                     os.mkdir(folder_path)
             
@@ -65,12 +71,12 @@ def organise(path):
                 try:
                     if flag is None:
                         os.rename(current_path, destination_path)
-                        print(f"{file} Successfully moved to destination folder.")
+                        # print(f"{file} Successfully moved to destination folder.")
                         moves_count += 1
                         file_trace(path,file,folder)
                     else:
                         os.replace(current_path,destination_path)
-                        print(f"{file} Successfully moved to destination folder.")
+                        # print(f"{file} Successfully moved to destination folder.")
                         file_trace(path,file,folder,new_name,flag)
                     
                 except Exception as e:
@@ -78,6 +84,8 @@ def organise(path):
                     print(f"An error has occured during moving the file {e}")
                     print("="*80)
     return moves_count
+
+# Used to log changes in moves.txt file
 
 def file_trace(path,file,move_to,new_name = None,renamed = None):
     moves = os.path.join(path,"moves.txt")
@@ -106,7 +114,7 @@ def main():
                 if os.path.isdir(path):
                     moves_count = organise(path)
                     if moves_count > 0:
-                        print("All the files has been moved to the respective folders.\nAlso saved the move in moves.txt file.")
+                        print(f"{moves_count} file/files has been moved to their respective folders.\nAlso saved the changes made in moves.txt file.")
                     else:
                         if not os.listdir(path):
                             print("The given folder is Empty.")
