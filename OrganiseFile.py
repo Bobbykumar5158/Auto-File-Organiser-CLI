@@ -10,9 +10,6 @@ known_extension = {
     "Others" : []
 }
 
-def isdir(path):
-    return os.path.isdir(path)
-
 def folder_Name(path):
     head,ext = os.path.splitext(path)
     for name in known_extension:
@@ -34,14 +31,14 @@ def rename(current_path,destination_path):
     else:
         if not (choice == "y"):
             print ("\nInvalid Choice. Going to Rename it")
-        print("Exclude extension.")
-        print("Note the name should not be in the given list. =>",os.listdir(destination_path))
+        print("Note the name shouldn't be in the given list and Exclude extension. =>",os.listdir(destination_path))
         name = input("Enter the name you want to give : ")
         print("="*80)
         return name+(os.path.splitext(current_path)[1]),True
 
 
 def organise(path):
+    moves_count = 0
     for root,dirs,files in os.walk(path):
         if any(folder in root for folder in ["Code", "Documents","Executable", "Photos","Audio", "Videos", "Others"]):
             continue
@@ -61,7 +58,7 @@ def organise(path):
                 flag = None
                 if os.path.exists(destination_path):
                     print("="*80)
-                    print(f"File exists in the folder {folder} with same name i.e {file}")
+                    print(f"File exists in the folder '{folder}' with same name as '{file}'")
                     new_name,flag = rename(current_path,folder_path)
                     destination_path = os.path.join(folder_path,new_name)
 
@@ -69,6 +66,7 @@ def organise(path):
                     if flag is None:
                         os.rename(current_path, destination_path)
                         print(f"{file} Successfully moved to destination folder.")
+                        moves_count += 1
                         file_trace(path,file,folder)
                     else:
                         os.replace(current_path,destination_path)
@@ -76,9 +74,10 @@ def organise(path):
                         file_trace(path,file,folder,new_name,flag)
                     
                 except Exception as e:
-                    print("*"*80)
+                    print("="*80)
                     print(f"An error has occured during moving the file {e}")
-                    print("*"*80)
+                    print("="*80)
+    return moves_count
 
 def file_trace(path,file,move_to,new_name = None,renamed = None):
     moves = os.path.join(path,"moves.txt")
@@ -90,3 +89,38 @@ def file_trace(path,file,move_to,new_name = None,renamed = None):
         else:
             move = f" '{file}' is moved to folder '{move_to}'\n"
         f.write(move)
+
+def main():
+
+    print("="*80)
+    print(f"{' Auto File Organiser ':-^80}")
+    print("="*80)
+
+    choice = input("Do you want to organise folder ? (y/n) : ").lower().strip()
+    while True :
+        print("="*80)
+        if choice == "y":
+            path = input("To Organise enter the folder path here (without double or single quotes) : ").strip()
+            if os.path.exists(path) and os.path.isdir(path):
+                moves_count = organise(path)
+                print("-"*80)
+                if moves_count > 0:
+                    print("All the files has been moved to the respective folders.\nAlso saved the move in moves.txt file.")
+                else:
+                    print("The given folder path is already Organised")                
+
+            else:
+                print("\n",f'{" Path does not exists ":-^80}')
+
+        elif choice == "n":
+            print(f"{' Exiting the program ':-^80}")
+            print("="*80)
+            break
+        else:
+            print(f'{" Invalid Choice ":-^80}')
+        print("="*80)
+        choice = input("Do you want to organise another folder ? (y/n) : ").lower().strip()
+
+
+if __name__ == "__main__":
+    main()
