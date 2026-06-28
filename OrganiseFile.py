@@ -107,7 +107,10 @@ def main():
                 if moves_count > 0:
                     print("All the files has been moved to the respective folders.\nAlso saved the move in moves.txt file.")
                 else:
-                    print("The given folder path is already Organised")                
+                    if not os.listdir(path):
+                        print("The given folder is Empty.")
+                    else:
+                        print("The given folder path is already Organised.")                
 
             else:
                 print("\n",f'{" Path does not exists ":-^80}')
