@@ -101,19 +101,21 @@ def main():
         print("="*80)
         if choice == "y":
             path = input("To Organise enter the folder path here (without double or single quotes) : ").strip()
-            if os.path.exists(path) and os.path.isdir(path):
-                moves_count = organise(path)
-                print("-"*80)
-                if moves_count > 0:
-                    print("All the files has been moved to the respective folders.\nAlso saved the move in moves.txt file.")
-                else:
-                    if not os.listdir(path):
-                        print("The given folder is Empty.")
+            print("-"*80)
+            if os.path.exists(path):
+                if os.path.isdir(path):
+                    moves_count = organise(path)
+                    if moves_count > 0:
+                        print("All the files has been moved to the respective folders.\nAlso saved the move in moves.txt file.")
                     else:
-                        print("The given folder path is already Organised.")                
-
-            else:
-                print("\n",f'{" Path does not exists ":-^80}')
+                        if not os.listdir(path):
+                            print("The given folder is Empty.")
+                        else:
+                            print("The given folder path is already Organised.")                
+                else:
+                    print(" Given folder path is not a folder ")
+            else:     
+                print(" Path does not exists ")
 
         elif choice == "n":
             print(f"{' Exiting the program ':-^80}")
