@@ -1,6 +1,6 @@
 import os
 
-# Change thi dictionary to create folder of your choice
+# Change this dictionary to create folder of your choice
 
 known_extension = {
     "Photos" : [".jpg",".jpeg",".png",".webp"],
@@ -71,12 +71,10 @@ def organise(path):
                 try:
                     if flag is None:
                         os.rename(current_path, destination_path)
-                        # print(f"{file} Successfully moved to destination folder.")
                         moves_count += 1
                         file_trace(path,file,folder)
                     else:
                         os.replace(current_path,destination_path)
-                        # print(f"{file} Successfully moved to destination folder.")
                         file_trace(path,file,folder,new_name,flag)
                     
                 except Exception as e:
